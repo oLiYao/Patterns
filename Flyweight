@@ -1,0 +1,36 @@
+class TreeType is
+    field name
+    field color
+    field texture
+    constructor TreeType(name, color, texture) { ... }
+    method draw(canvas, x, y) is
+   
+
+class TreeFactory is
+    static field treeTypes: collection of tree types
+    static method getTreeType(name, color, texture) is
+        type = treeTypes.find(name, color, texture)
+        if (type == null)
+            type = new TreeType(name, color, texture)
+            treeTypes.add(type)
+        return type
+
+
+class Tree is
+    field x,y
+    field type: TreeType
+    constructor Tree(x, y, type) { ... }
+    method draw(canvas) is
+        type.draw(canvas, this.x, this.y)
+
+class Forest is
+    field trees: collection of Trees
+
+    method plantTree(x, y, name, color, texture) is
+        type = TreeFactory.getTreeType(name, color, texture)
+        tree = new Tree(x, y, type)
+        trees.add(tree)
+
+    method draw(canvas) is
+        foreach (tree in trees) do
+            tree.draw(canvas)
