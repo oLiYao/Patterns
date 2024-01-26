@@ -1,0 +1,44 @@
+class Editor is
+    private field text, curX, curY, selectionWidth
+
+    method setText(text) is
+        this.text = text
+
+    method setCursor(x, y) is
+        this.curX = x
+        this.curY = y
+
+    method setSelectionWidth(width) is
+        this.selectionWidth = width
+
+    method createSnapshot(): Snapshot is
+       
+        return new Snapshot(this, text, curX, curY, selectionWidth)
+
+class Snapshot is
+    private field editor: Editor
+    private field text, curX, curY, selectionWidth
+
+    constructor Snapshot(editor, text, curX, curY, selectionWidth) is
+        this.editor = editor
+        this.text = text
+        this.curX = x
+        this.curY = y
+        this.selectionWidth = selectionWidth
+
+  
+    method restore() is
+        editor.setText(text)
+        editor.setCursor(curX, curY)
+        editor.setSelectionWidth(selectionWidth)
+
+
+class Command is
+    private field backup: Snapshot
+
+    method makeBackup() is
+        backup = editor.createSnapshot()
+
+    method undo() is
+        if (backup != null)
+            backup.restore()
