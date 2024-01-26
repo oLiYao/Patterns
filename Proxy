@@ -1,0 +1,62 @@
+interface ThirdPartyYouTubeLib is
+    method listVideos()
+    method getVideoInfo(id)
+    method downloadVideo(id)
+
+
+class ThirdPartyYouTubeClass implements ThirdPartyYouTubeLib is
+    method listVideos() is
+      
+    method getVideoInfo(id) is
+      
+
+    method downloadVideo(id) is
+    
+
+
+class CachedYouTubeClass implements ThirdPartyYouTubeLib is
+    private field service: ThirdPartyYouTubeLib
+    private field listCache, videoCache
+    field needReset
+
+    constructor CachedYouTubeClass(service: ThirdPartyYouTubeLib) is
+        this.service = service
+
+    method listVideos() is
+        if (listCache == null || needReset)
+            listCache = service.listVideos()
+        return listCache
+
+    method getVideoInfo(id) is
+        if (videoCache == null || needReset)
+            videoCache = service.getVideoInfo(id)
+        return videoCache
+
+    method downloadVideo(id) is
+        if (!downloadExists(id) || needReset)
+            service.downloadVideo(id)
+
+class YouTubeManager is
+    protected field service: ThirdPartyYouTubeLib
+
+    constructor YouTubeManager(service: ThirdPartyYouTubeLib) is
+        this.service = service
+
+    method renderVideoPage(id) is
+        info = service.getVideoInfo(id)
+      
+
+    method renderListPanel() is
+        list = service.listVideos()
+    
+
+    method reactOnUserInput() is
+        renderVideoPage()
+        renderListPanel()
+
+class Application is
+    method init() is
+        YouTubeService = new ThirdPartyYouTubeClass()
+        YouTubeProxy = new CachedYouTubeClass(YouTubeService)
+        manager = new YouTubeManager(YouTubeProxy)
+        manager.reactOnUserInput()
