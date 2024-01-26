@@ -1,0 +1,70 @@
+interface ComponentWithContextualHelp is
+    method showHelp()
+
+
+abstract class Component implements ComponentWithContextualHelp is
+    field tooltipText: string
+
+   
+    protected field container: Container
+
+  
+    method showHelp() is
+        if (tooltipText != null)
+          
+        else
+            container.showHelp()
+
+
+abstract class Container extends Component is
+    protected field children: array of Component
+
+    method add(child) is
+        children.add(child)
+        child.container = this
+
+
+
+class Button extends Component is
+ 
+
+class Panel extends Container is
+    field modalHelpText: string
+
+    method showHelp() is
+        if (modalHelpText != null)
+           
+        else
+            super.showHelp()
+
+
+class Dialog extends Container is
+    field wikiPageURL: string
+
+    method showHelp() is
+        if (wikiPageURL != null)
+          
+        else
+            super.showHelp()
+
+
+
+class Application is
+   
+    method createUI() is
+        dialog = new Dialog("Budget Reports")
+        dialog.wikiPageURL = "http://..."
+        panel = new Panel(0, 0, 400, 800)
+        panel.modalHelpText = "This panel does..."
+        ok = new Button(250, 760, 50, 20, "OK")
+        ok.tooltipText = "This is an OK button that..."
+        cancel = new Button(320, 760, 50, 20, "Cancel")
+    
+        panel.add(ok)
+        panel.add(cancel)
+        dialog.add(panel)
+
+    
+    method onF1KeyPress() is
+        component = this.getComponentAtMouseCoords()
+        component.showHelp()
