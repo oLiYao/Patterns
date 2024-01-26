@@ -1,0 +1,60 @@
+class GameAI is
+ 
+    method turn() is
+        collectResources()
+        buildStructures()
+        buildUnits()
+        attack()
+
+  
+    method collectResources() is
+        foreach (s in this.builtStructures) do
+            s.collect()
+
+  
+    abstract method buildStructures()
+    abstract method buildUnits()
+
+   
+    method attack() is
+        enemy = closestEnemy()
+        if (enemy == null)
+            sendScouts(map.center)
+        else
+            sendWarriors(enemy.position)
+
+    abstract method sendScouts(position)
+    abstract method sendWarriors(position)
+
+
+class OrcsAI extends GameAI is
+    method buildStructures() is
+        if (there are some resources) then
+          
+
+    method buildUnits() is
+        if (there are plenty of resources) then
+            if (there are no scouts)
+         
+            else
+               
+
+  
+
+    method sendScouts(position) is
+        if (scouts.length > 0) then
+         
+
+    method sendWarriors(position) is
+        if (warriors.length > 5) then
+           
+
+
+class MonstersAI extends GameAI is
+    method collectResources() is
+   
+
+    method buildStructures() is
+       
+
+    method buildUnits() is
