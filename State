@@ -1,0 +1,110 @@
+abstract class State is
+    protected field player: AudioPlayer
+
+
+    constructor State(player) is
+        this.player = player
+
+    abstract method clickLock()
+    abstract method clickPlay()
+    abstract method clickNext()
+    abstract method clickPrevious()
+
+
+class LockedState extends State is
+
+  
+    method clickLock() is
+        if (player.playing)
+            player.changeState(new PlayingState(player))
+        else
+            player.changeState(new ReadyState(player))
+
+    method clickPlay() is
+     
+
+    method clickNext() is
+     
+
+    method clickPrevious() is
+      
+
+
+
+class ReadyState extends State is
+    method clickLock() is
+        player.changeState(new LockedState(player))
+
+    method clickPlay() is
+        player.startPlayback()
+        player.changeState(new PlayingState(player))
+
+    method clickNext() is
+        player.nextSong()
+
+    method clickPrevious() is
+        player.previousSong()
+
+
+class PlayingState extends State is
+    method clickLock() is
+        player.changeState(new LockedState(player))
+
+    method clickPlay() is
+        player.stopPlayback()
+        player.changeState(new ReadyState(player))
+
+    method clickNext() is
+        if (event.doubleclick)
+            player.nextSong()
+        else
+            player.fastForward(5)
+
+    method clickPrevious() is
+        if (event.doubleclick)
+            player.previous()
+        else
+            player.rewind(5)
+
+
+
+class AudioPlayer is
+    field state: State
+    field UI, volume, playlist, currentSong
+
+    constructor AudioPlayer() is
+        this.state = new ReadyState(this)
+
+       
+        UI = new UserInterface()
+        UI.lockButton.onClick(this.clickLock)
+        UI.playButton.onClick(this.clickPlay)
+        UI.nextButton.onClick(this.clickNext)
+        UI.prevButton.onClick(this.clickPrevious)
+
+ 
+    method changeState(state: State) is
+        this.state = state
+
+  
+    method clickLock() is
+        state.clickLock()
+    method clickPlay() is
+        state.clickPlay()
+    method clickNext() is
+        state.clickNext()
+    method clickPrevious() is
+        state.clickPrevious()
+
+   
+    method startPlayback() is
+     
+    method stopPlayback() is
+  
+    method nextSong() is
+   
+    method previousSong() is
+    
+    method fastForward(time) is
+      
+    method rewind(time) is
